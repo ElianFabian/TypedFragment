@@ -52,7 +52,7 @@ import android.os.Parcelable
  * 	companion object {
  * 		fun newInstance(id: String? = null, args: Args? = null) = MyFragment().apply {
  * 			if (args != null) {
- * 				arguments = createBundleFromDialogArgs(args)
+ * 				arguments = createArgsBundle(args)
  * 			}
  *
  * 			fragmentId = id ?: MyFragment::class.qualifiedName
@@ -70,7 +70,7 @@ import android.os.Parcelable
  * )
  *
  * // Set the listener
- * myFragment.setOnEventListener(this@SomeFragment) { event ->
+ * myFragment.setFragmentEventListener(this@SomeFragment) { event ->
  * 	when (event) {
  * 		is MyFragment.Event.OnAccept -> {
  * 			// Do something
