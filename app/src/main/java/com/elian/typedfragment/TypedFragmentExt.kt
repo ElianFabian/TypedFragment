@@ -196,6 +196,79 @@ inline fun <T, TArgs : Parcelable> T.showDialog(
 
 
 /**
+ * Shows the dialog fragment with optional args.
+ *
+ * The dialog fragment will be shown only if it's not already shown.
+ *
+ * @param fragmentManager The FragmentManager this fragment will be added to.
+ * @param tag The tag for this fragment, as per [androidx.fragment.app.FragmentTransaction.add].
+ * @param args The arguments that can passed to the dialog fragment.
+ */
+inline fun <T, TArgs : Parcelable> T.showDialogOnce(
+	fragmentManager: FragmentManager,
+	tag: String,
+	args: TArgs? = null,
+) where T : DialogFragment, T : TypedFragment<TArgs, *> {
+
+	if (fragmentManager.findFragmentByTag(tag) == null && dialog?.isShowing != true) {
+		showDialog(fragmentManager, tag, args)
+	}
+}
+
+/**
+ * Shows the dialog fragment with optional args.
+ *
+ * The dialog fragment will be shown only if it's not already shown.
+ *
+ * @param fragmentManager The FragmentManager this fragment will be added to.
+ * @param args The arguments that can passed to the dialog fragment.
+ */
+inline fun <T, TArgs : Parcelable> T.showDialogOnce(
+	fragmentManager: FragmentManager,
+	args: TArgs? = null,
+) where T : DialogFragment, T : TypedFragment<TArgs, *> {
+
+	showDialogOnce(fragmentManager, fragmentId ?: return, args)
+}
+
+/**
+ * Shows the dialog fragment with optional args.
+ *
+ * The dialog fragment will be shown only if it's not already shown.
+ *
+ * @param fragment The fragment from which the dialog fragment it's going to be shown.
+ * @param args The arguments that can passed to the dialog fragment.
+ */
+inline fun <T, TArgs : Parcelable> T.showDialogOnce(
+	fragment: Fragment,
+	args: TArgs? = null,
+) where T : DialogFragment, T : TypedFragment<TArgs, *> {
+
+	require(fragment != this) {
+		"Cannot set event listener on the same dialog fragment instance: ${fragment::class.qualifiedName}."
+	}
+
+	showDialogOnce(fragment.childFragmentManager, args)
+}
+
+/**
+ * Shows the dialog fragment with optional args.
+ *
+ * The dialog fragment will be shown only if it's not already shown.
+ *
+ * @param activity The activity from which the dialog fragment it's going to be shown.
+ * @param args The arguments that can passed to the dialog fragment.
+ */
+inline fun <T, TArgs : Parcelable> T.showDialogOnce(
+	activity: FragmentActivity,
+	args: TArgs? = null,
+) where T : DialogFragment, T : TypedFragment<TArgs, *> {
+
+	showDialogOnce(activity.supportFragmentManager, args)
+}
+
+
+/**
  * Dismisses the dialog fragment safely, even outside the dialog fragment itself.
  *
  * @param fragmentManager The fragment manager associated with the dialog fragment.
